@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, Admin!</h1>
+
+        <!-- Admin Actions: Add Teacher/Student, Return to Home -->
+        <div class="admin-actions">
+            <button onclick="addTeacher()">Add Teacher</button>
+            <button onclick="addStudent()">Add Student</button>
+            <button onclick="window.location.href='index.html'">Home</button>
+        </div>
+
+        <h2>Manage Users</h2>
+
+        <!-- List of Students -->
+        <h3>Students</h3>
+        <ul id="student-list">
+            <!-- List of students will be generated here -->
+        </ul>
+
+        <!-- List of Teachers -->
+        <h3>Teachers</h3>
+        <ul id="teacher-list">
+            <!-- List of teachers will be generated here -->
+        </ul>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Load users (admin, student, teacher) into the dashboard
+        function loadUsers() {
+            const studentList = document.getElementById("student-list");
+            const teacherList = document.getElementById("teacher-list");
+
+            studentList.innerHTML = "";
+            teacherList.innerHTML = "";
+
+            // Loop through the users object and add to respective list
+            for (const username in users) {
+                const user = users[username];
+                const li = document.createElement('li');
+                li.textContent = `${user.username} (${user.role})`;
+
+                // Edit button
+                const editButton = document.createElement('button');
+                editButton.textContent = "Edit";
+                editButton.onclick = function() { editUser(username); };
+                li.appendChild(editButton);
+
+                // Delete button
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = "Delete";
+                deleteButton.onclick = function() { deleteUser(username); };
+                li.appendChild(deleteButton);
+
+                // Add user to the appropriate list
+                if (user.role === 'student') {
+                    studentList.appendChild(li);
+                } else if (user.role === 'teacher') {
+                    teacherList.appendChild(li);
+                }
+            }
+        }
+
+        // Add a new teacher
+        function addTeacher() {
+            const username = prompt("Enter teacher username:");
+            const password = prompt("Enter password:");
+            if (username && password) {
+                users[username] = { username, password, role: 'teacher' };
+                alert("Teacher added!");
+                loadUsers(); // Refresh the user list
+            }
+        }
+
+        // Add a new student
+        function addStudent() {
+            const username = prompt("Enter student username:");
+            const password = prompt("Enter password:");
+            if (username && password) {
+                users[username] = { username, password, role: 'student' };
+                alert("Student added!");
+                loadUsers(); // Refresh the user list
+            }
+        }
+
+        // Edit a user (username and password)
+        function editUser(username) {
+            const user = users[username];
+            const newPassword = prompt(`Edit password for ${username} (current: ${user.password}):`, user.password);
+            if (newPassword) {
+                user.password = newPassword;
+                alert(`Password for ${username} updated successfully!`);
+                loadUsers(); // Refresh the user list
+            }
+        }
+
+        // Delete a user
+        function deleteUser(username) {
+            if (confirm(`Are you sure you want to delete ${username}?`)) {
+                delete users[username];
+                alert(`${username} has been deleted.`);
+                loadUsers(); // Refresh the user list
+            }
+        }
+
+        // Load users when the page loads
+        window.onload = loadUsers;
+    </script>
+</body>
+</html>
