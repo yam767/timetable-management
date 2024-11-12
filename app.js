@@ -1,8 +1,8 @@
 // Simulated User Data (for login)
 const users = {
-    admin: { username: "admin", password: "admin123", role: "admin" },
-    teacher: { username: "teacher", password: "teacher123", role: "teacher" },
-    student: { username: "student", password: "student123", role: "student" },
+    admin: { username: "admin", password: "admin123@", role: "admin" },
+    teacher: { username: "teacher", password: "teacher123@", role: "teacher" },
+    student: { username: "student", password: "student123@", role: "student" },
 };
 
 // Login function based on the selected role
